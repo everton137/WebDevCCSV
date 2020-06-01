@@ -30,14 +30,33 @@ const theme = createMuiTheme({
 class App extends React.Component {
   state = {
     inputSphere: 0,
-    results: [],
+    inputCylinder: 5,
+    inputAddition: 0,
+    results: result.data,
     darkMode: false,
   };
-  findResults = (inputSphere) => {
-    this.setState({ results: result.data });
+  findResults = (inputSphere, inputCylinder, inputAddition) => {
+    this.setState({
+      results: result.data
+        .filter(
+          (obj) =>
+            obj.maxSphere >= this.state.inputSphere &&
+            obj.minSphere <= this.state.inputSphere
+        )
+        .filter(
+          (obj) =>
+            obj.maxCylinder >= this.state.inputCylinder &&
+            obj.minCylinder <= this.state.inputCylinder
+        )
+        .filter(
+          (obj) =>
+            obj.maxAddition >= this.state.inputAddition &&
+            obj.minAddition <= this.state.inputAddition
+        ),
+    });
   };
   onSearch = () => {
-    console.log("to be done");
+    this.findResults();
   };
   onChange = (key, value) => {
     this.setState({ [key]: value });
@@ -48,7 +67,13 @@ class App extends React.Component {
     });
   };
   render() {
-    const { darkMode, inputSphere, results } = this.state;
+    const {
+      darkMode,
+      inputSphere,
+      inputCylinder,
+      inputAddition,
+      results,
+    } = this.state;
     return (
       <ThemeProvider theme={theme}>
         <div className={darkMode ? "AppDark" : "AppLight"}>
@@ -57,6 +82,18 @@ class App extends React.Component {
               inputField={inputSphere}
               name="inputSphere"
               label="Sphere"
+              onChange={this.onChange}
+            />
+            <InputField
+              inputField={inputCylinder}
+              name="inputCylinder"
+              label="Cylinder"
+              onChange={this.onChange}
+            />
+            <InputField
+              inputField={inputAddition}
+              name="inputAddition"
+              label="Addition"
               onChange={this.onChange}
             />
             <SearchButton onSearch={this.onSearch} />
